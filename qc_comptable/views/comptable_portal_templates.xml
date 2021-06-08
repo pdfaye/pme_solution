@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend" name="otr_static assets" inherit_id="web.assets_frontend" priority="1">
+        <xpath expr="//script[last()]" position="after">
+            <script type="text/javascript" src="/qc_comptable/static/src/js/script.js"></script>
+        </xpath>
+    </template>
+
+    <template id="portal_layout" name="Portal layout: MS Associates menu" inherit_id="portal.portal_layout">
+        <xpath expr="//div[@class='o_portal_my_details']" position="after">
+            <div class="o-msa-menu-sidebar mt-4">
+                <h4>Menu</h4>
+                <hr class="mt-1 mb-0"/>
+                <li>Mes rapports<a role="button" href="/my/msa/reports" class="btn btn-sm btn-link"> <i class="fa fa-eye"/></a></li>
+                <li>Mes Facture<a role="button" href="/my/msa/facture" class="btn btn-sm btn-link"> <i class="fa fa-eye"/></a></li>
+                <li>Fichier envoyé<a role="button" href="/my/msa/accounting" class="btn btn-sm btn-link"> <i class="fa fa-eye"/></a></li>
+                <li>Fichier template de soumission<a role="button" href="/qc_comptable/static/src/template_soumission.xlsx" class="btn btn-sm btn-link"> <i class="fa fa-download"/></a></li>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home" name="Portail Client: Comptabilité" inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Mes envois</t>
+                <t t-set="url" t-value="'/my/msa/accounting'"/>
+                <t t-set="count" t-value="batch_count"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Mes factures</t>
+                <t t-set="url" t-value="'/my/msa/factures'"/>
+                <t t-set="count" t-value="facture_count"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Mes rapports</t>
+                <t t-set="url" t-value="'/my/msa/rapports'"/>
+                <t t-set="count" t-value="batch_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_batchs" name="Mes Fichiers envoyés">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Batch</t>
+            </t>
+            <t t-if="not batchs">
+                <div class="alert alert-warning mt8" role="alert">
+                    Pas de fichiers.
+                </div>
+            </t>
+            <tbody>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3 class="mb32">Soumettre un fichier</h3>
+                        <form action="/my/msa/accounting" method="post" class="s_website_form form-horizontal container-fluid form-inline" enctype="multipart/form-data">
+                            <div class="custom-file">
+                              <input type="file" name="attachment" multiple="true" data-show-upload="true" data-show-caption="true" lass="file" data-show-preview="true" class="custom-file-input col-xs-10" id="customFile"/>
+                              <label class="custom-file-label" for="customFile">Envoyer le fichier de soumission</label>
+                            </div>
+                            <input type="hidden" name="form_ref" value="batch_submit"/>
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+                    </div>
+                    <div class="col-md-8">
+                        <t t-if="batchs" t-call="portal.portal_table">
+                            <h3 class="mb32">Fichiers envoyés</h3>
+                            <tr t-foreach="batchs" t-as="batch">
+                                <td>
+                                    <span t-field="batch.name"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="batch.stage"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </div>
+                </div>
+            </tbody>
+        </t>
+    </template>
+
+    <template id="portal_my_factures" name="Mes Factures">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Facture</t>
+            </t>
+            <t t-if="not factures">
+                <div class="alert alert-warning mt8" role="alert">
+                    Pas de fichiers.
+                </div>
+            </t>
+            <t t-if="factures">
+                <h3 class="mb32">Mes Factures</h3>
+                <t t-call="portal.portal_table">
+                    <thead>
+                        <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                            <th class="text-left">Name</th>
+                            <th class="text-right">Date</th>
+                            <th class="text-right">Montant Facture</th>
+                            <th class="text-right">Etape de traitement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="factures" t-as="facture">
+                            <td class="text-left">
+                                <a t-attf-href="/my/msa/facture/#{facture.id}"><span t-field="facture.name"/></a>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="facture.date_facture"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="facture.total_facture"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="facture.stage"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_facture" name="Ma Facture">
+        <t t-call="portal.portal_layout">
+            <t t-set="o_portal_fullwidth_alert" groups="base.group_no_one">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=qc_comptable.facture&amp;id=%s&amp;view_type=form' % (facture.id)"/>
+                </t>
+            </t>
+
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <h5 class="mb-0">
+                        <small class="text-muted">Reference Facture. - </small><span t-field="facture.name"/> <small class="text-muted">-- du - </small><span t-field="facture.date_facture"/> <small class="text-muted">-- Montant TTC - </small><span t-field="facture.total_facture"/>
+                    </h5>
+                </t>
+                <t t-set="card_body">
+                    <div class="row">
+                        <div t-if="facture.article_ids" class="col-12">
+                            <h6>Article</h6>
+                            <t t-call="portal.portal_table">
+                                <thead>
+                                    <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                        <th class="text-left">Designation</th>
+                                        <th class="text-right">Quantité</th>
+                                        <th class="text-right">Prix Unitaire</th>
+                                        <th class="text-right">Prix THT</th>
+                                        <th class="text-right">Prix TTC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="facture.article_ids" t-as="article">
+                                        <td class="text-left">
+                                            <span t-field="article.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="article.qty"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="article.prix_unitaire_ht"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="article.prix_total_ht"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="article.prix_ttc"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </t>
+                            <div class="row" t-if="facture.attachment_ids">
+                                <div t-if="facture.attachment_ids" t-attf-class="col col-12 col-lg-12">
+                                    <hr class="mb-1 d-none d-lg-block"/>
+                                    <strong class="d-block mb-2">Attachments</strong>
+                                    <div class="row">
+                                        <div t-attf-class="col col-lg-12">
+                                            <ul class="list-group">
+                                                <a class="list-group-item list-group-item-action d-flex align-items-center oe_attachments py-1 px-2" t-foreach='vootr.attachment_ids' t-as='attachment' t-attf-href="/web/content/#{attachment.id}?download=true&amp;access_token=#{attachment.access_token}" target="_blank" data-no-post-process="">
+                                                    <div class='oe_attachment_embedded o_image o_image_small mr-2 mr-lg-3' t-att-title="attachment.name" t-att-data-mimetype="attachment.mimetype" t-attf-data-src="/web/image/#{attachment.id}/50x40?access_token=#{attachment.access_token}"/>
+                                                    <div class='oe_attachment_name text-truncate'><t t-esc='attachment.name'/></div>
+                                                </a>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <div class="mt32">
+                <h4><strong>Historique des messages et communications</strong></h4>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="facture"/>
+                    <t t-set="pid" t-value="pid"/>
+                    <t t-set="hash" t-value="hash"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!--
+
+    <template id="portal_my_tasks" name="My Tasks">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Tasks</t>
+            </t>
+            <t t-if="not grouped_tasks">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no tasks.
+                </div>
+            </t>
+            <t t-if="grouped_tasks">
+                <t t-call="portal.portal_table">
+                    <t t-foreach="grouped_tasks" t-as="tasks">
+                        <thead>
+                            <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                <th t-if="groupby == 'none'">Name</th>
+                                <th t-else="">
+                                    <em class="font-weight-normal text-muted"><span t-field="tasks[0].sudo().project_id.label_tasks"/> for project:</em>
+                                    <span t-field="tasks[0].sudo().project_id.name"/></th>
+                                <th class="text-center">Stage</th>
+                                <th class="text-left">Ref</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="tasks" t-as="task">
+                                <tr>
+                                    <td>
+                                        <a t-attf-href="/my/task/#{task.id}?{{ keep_query() }}"><span t-field="task.name"/></a>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge badge-pill badge-info" title="Current stage of the task" t-esc="task.stage_id.name" />
+                                    </td>
+                                    <td class="text-left">
+                                        #<span t-esc="task.id"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_task" name="My Task">
+        <t t-call="portal.portal_layout">
+            <t t-set="o_portal_fullwidth_alert" groups="project.group_project_user">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=project.task&amp;id=%s&amp;view_type=form' % (task.id)"/>
+                </t>
+            </t>
+
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <div class="row no-gutters">
+                        <div class="col-md">
+                            <h5 class="mb-1 mb-md-0">
+                                <span t-field="task.name"/>
+                                <small class="text-muted"> (#<span t-field="task.id"/>)</small>
+                            </h5>
+                        </div>
+                        <div class="col-md text-md-right">
+                            <small class="text-right">Status:</small>
+                            <span t-field="task.stage_id.name" class=" badge badge-pill badge-info" title="Current stage of this task"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-set="card_body">
+                    <div class="mb-1" t-if="user.partner_id.id in task.sudo().project_id.message_partner_ids.ids">
+                        <strong>Project:</strong> <a t-attf-href="/my/project/#{task.project_id.id}" t-field="task.project_id.name"/>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Date:</strong> <span t-field="task.create_date" t-options='{"widget": "date"}'/>
+                        </div>
+                        <div class="col-12 col-md-6" t-if="task.date_deadline">
+                            <strong>Deadline:</strong> <span t-field="task.date_deadline" t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4" t-if="task.user_id or task.partner_id">
+                        <div class="col-12 col-md-6 pb-2" t-if="task.user_id">
+                            <strong>Assigned to</strong>
+                            <div class="row">
+                                <div class="col flex-grow-0 pr-3">
+                                    <img t-if="task.user_id.image" class="rounded-circle mt-1 o_portal_contact_img" t-att-src="image_data_uri(task.user_id.image)" alt="Contact"/>
+                                    <img t-else="" class="rounded-circle mt-1 o_portal_contact_img" src="/web/static/src/img/user_menu_avatar.png" alt="Contact"/>
+                                </div>
+                                <div class="col pl-md-0">
+                                    <div t-field="task.user_id" t-options='{"widget": "contact", "fields": ["name", "email", "phone"]}'/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coll-12 col-md-6 pb-2" t-if="task.partner_id">
+                            <strong>Reported by</strong>
+                            <div class="row">
+                                <div class="col flex-grow-0 pr-3">
+                                    <img t-if="task.partner_id.image" class="rounded-circle mt-1 o_portal_contact_img" t-att-src="image_data_uri(task.partner_id.image)" alt="Contact"/>
+                                    <img t-else="" class="rounded-circle mt-1 o_portal_contact_img" src="/web/static/src/img/user_menu_avatar.png" alt="Contact"/>
+                                </div>
+                                <div class="col pl-md-0">
+                                    <div t-field="task.partner_id" t-options='{"widget": "contact", "fields": ["name", "email", "phone"]}'/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" t-if="task.description or task.attachment_ids">
+                        <div t-if="task.description" t-attf-class="col-12 col-lg-7 mb-4 mb-md-0 {{'col-lg-7' if task.attachment_ids else 'col-lg-12'}}">
+                            <hr class="mb-1"/>
+                            <strong class="d-block mb-2">Description</strong>
+                            <div class="py-1 px-2 bg-100 small" t-field="task.description"/>
+                        </div>
+                        <div t-if="task.attachment_ids" t-attf-class="col-12 col-lg-5 o_project_portal_attachments {{'col-lg-5' if task.description else 'col-lg-12'}}">
+                            <hr class="mb-1 d-none d-lg-block"/>
+                            <strong class="d-block mb-2">Attachments</strong>
+                            <div class="row">
+                                <div t-attf-class="col {{'col-lg-6' if not task.description else 'col-lg-12'}}">
+                                    <ul class="list-group">
+                                        <a class="list-group-item list-group-item-action d-flex align-items-center oe_attachments py-1 px-2" t-foreach='task.attachment_ids' t-as='attachment' t-attf-href="/web/content/#{attachment.id}?download=true&amp;access_token=#{attachment.access_token}" target="_blank" data-no-post-process="">
+                                            <div class='oe_attachment_embedded o_image o_image_small mr-2 mr-lg-3' t-att-title="attachment.name" t-att-data-mimetype="attachment.mimetype" t-attf-data-src="/web/image/#{attachment.id}/50x40?access_token=#{attachment.access_token}"/>
+                                            <div class='oe_attachment_name text-truncate'><t t-esc='attachment.name'/></div>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+            <div class="mt32">
+                <h4><strong>Message and communication history</strong></h4>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="task"/>
+                    <t t-set="token" t-value="task.access_token"/>
+                    <t t-set="pid" t-value="pid"/>
+                    <t t-set="hash" t-value="hash"/>
+                </t>
+            </div>
+        </t>
+    </template>
+    -->
+</odoo>

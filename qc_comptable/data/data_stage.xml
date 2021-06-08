@@ -1,0 +1,16 @@
+<odoo>
+    <data noupdate="1">
+        <record model="qc_comptable.stage" id="stage_new">
+            <field name="name">Traitement à faire</field>
+            <field name="sequence">1</field>
+        </record>
+        <record model="qc_comptable.stage" id="stage_in_progress">
+            <field name="name">Traitement en cours</field>
+            <field name="sequence">2</field>
+        </record>
+        <record model="qc_comptable.stage" id="stage_completed">
+            <field name="name">Traitement terminé</field>
+            <field name="sequence">3</field>
+        </record>
+    </data>
+</odoo>

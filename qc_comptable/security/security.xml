@@ -1,0 +1,15 @@
+<odoo>
+    <record model="ir.rule" id="msa_user_portal_files_rule">
+        <field name="name">MSA: Portal user files send</field>
+        <field name="model_id" ref="model_qc_comptable_soumission"/>
+        <field name="domain_force">[('submit_by', '=', user.id)]</field>
+        <field name="groups" eval="[(4,ref('base.group_portal'))]"/>
+    </record>
+
+    <record model="ir.rule" id="msa_user_portal_factures_rule">
+        <field name="name">MSA: Portal user factures</field>
+        <field name="model_id" ref="model_qc_comptable_facture"/>
+        <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        <field name="groups" eval="[(4,ref('base.group_portal'))]"/>
+    </record>
+</odoo>

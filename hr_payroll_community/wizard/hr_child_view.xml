@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_tpe_children_form" model="ir.ui.view">
+        <field name="name">hr.children.form</field>
+        <field name="model">hr.children</field>
+        <field name="arch" type="xml">
+            <form string="Enfant en charge">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="nom" />
+                        </group>
+                        <group>
+                            <field name="date_naissance" />
+                        </group>
+                        <group>
+                            <field name="age" />
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--<record id="view_hr_children_tree" model="ir.ui.view">
+            <field name="name">hr.children.tree</field>
+            <field name="model">hr.children</field>
+            <field name="arch" type="xml">
+                <tree string="Enfant en charge">
+                    <field name="nom"/>
+                    <field name="age"/>
+                </tree>
+            </field>
+    </record>-->
+    <record id="tpe_children_action" model="ir.actions.act_window">
+        <field name="name">Enfant en charge</field>
+        <field name="res_model">hr.children</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="children"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

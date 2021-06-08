@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_payslipdetails">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2><span style="font-size:30px;" t-field="o.name"/></h2>
+                    <table class="table table-sm table-bordered">
+                        <!--<tr>
+                            <td style="text-align:center;"><p><strong><span style="color:blue; font-size:30px;" t-field="o.name"/></strong></p>
+                            <p><img t-if="o.employee_id.image_1920" t-att-src="'data:image/png;base64,%s' % to_text(o.employee_id.image_1920)"
+                                             style="height:100px;width=100px" /></p>
+                            </td>
+
+
+                            <td style="text-align:center;">
+                            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)"
+                                             style="height:100px;width=100px" />
+                            </td>
+                        </tr>-->
+                        <tr>
+                            <td colspan="2" style="text-align:center;background-color:gray;"><p><strong>Bulletin de paie :</strong></p><p><span style="color:blue; font-size:30px;" t-field="o.number"/></p>
+                            </td>
+                            <td style="text-align:center;"><p><strong>Date du : <span t-field="o.date_from"/></strong></p>
+                                <p><strong>Au :<span t-field="o.date_to"/></strong></p>
+                            </td>
+                            <td><strong>Bank Account</strong><span t-field="o.employee_id.bank_account_id"/></td>
+
+
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p style="font-size:30px;"><span t-field="o.employee_id.name"/></p>
+                            <p><img t-if="o.employee_id.image_1920" t-att-src="'data:image/png;base64,%s' % to_text(o.employee_id.image_1920)"
+                                             style="height:200px;width=200px;" />
+                            </p>
+                            </td>
+                            <td><strong style="font-size:35px;">Coordonnées </strong>
+                                <p><strong>Téléphone : </strong><span t-field="o.employee_id.identification_id"/></p>
+                                <p><strong>Adresse : </strong><span t-field="o.employee_id.identification_id"/></p>
+                                <p><strong>Email : </strong><span t-field="o.employee_id.identification_id"/></p>
+                            </td>
+                            <td>
+                                <p><strong>Matricule : </strong><span t-field="o.employee_id.identification_id"/></p>
+                                <p><strong>Poste occupé(e) : </strong><span t-field="o.employee_id.job_id"/></p>
+                                <p><strong>Département : </strong><span t-field="o.employee_id.department_id"/></p>
+                           </td>
+                            <td>
+                                <p><strong>N° CNI : </strong><span t-field="o.employee_id.cni_id"/></p>
+                                <p><strong>N° de Passeport : </strong><span t-field="o.employee_id.passport_id"/></p>
+                                <p><strong>N° CSS : </strong><span t-field="o.employee_id.css_id"/></p>
+                                <p><strong>N° IPRES : </strong><span t-field="o.employee_id.ipres_id"/></p>
+                           </td>
+
+                        </tr>
+                        <tr>
+                            <td><strong>Encienneté :</strong><strong><span t-field="o.contract_id.enciennete"/></strong></td>
+                            <td colspan="3">
+                                <div t-field="o.employee_id.address_home_id"
+                                    t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address</strong></td>
+                            <td colspan="3">
+                                <div t-field="o.employee_id.address_home_id"
+                                    t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td><span t-field="o.employee_id.work_email"/></td>
+
+                        </tr>
+                        <tr>
+                            <td><strong>Reference</strong></td>
+                            <td><span t-field="o.number"/></td>
+                            <td><strong>Bank Account</strong></td>
+                            <td><span t-field="o.employee_id.bank_account_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date From</strong></td>
+                            <td><span t-field="o.date_from"/></td>
+                            <td><strong>Date To</strong></td>
+                            <td><span t-field="o.date_to"/></td>
+                        </tr>
+                    </table>
+
+                    <h3>Details by Salary Rule Category</h3>
+                    <table class="table table-sm mb32">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Salary Rule Category</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_details_by_rule_category.get(o.id, [])" t-as="h">
+                                <td>
+                                    <span t-esc="h['code']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'..'*h['level']"/><span t-esc="h['rule_category']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="h['total']"
+                                          t-esc-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Payslip Lines by Contribution Register</h3>
+                    <table class="table table-sm mt32">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Quantity/rate</th>
+                                <th>Amount</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_lines_by_contribution_register.get(o.id, [])" t-as="p">
+                                <td><span t-esc="p.get('code', '')"/></td>
+                                <td><span t-esc="p.get('name', '')"/></td>
+                                <td><span t-esc="p.get('quantity', '')"/></td>
+                                <td><span t-esc="p.get('amount', 0)"/></td>
+                                <td class="text-right">
+                                    <span t-esc="p.get('total', 0)"
+                                          t-esc-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p class="text-right"><strong>Authorized signature</strong></p>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

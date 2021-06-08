@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="batch_list">
+      <field name="name">List Fichier Recu</field>
+      <field name="model">qc_comptable.soumission</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="submit_by"/>
+          <field name="submit_on"/>
+          <field name="stage"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="batch_kanban">
+      <field name="name">List Fichier Recu</field>
+      <field name="model">qc_comptable.soumission</field>
+      <field name="arch" type="xml">
+        <kanban default_group_by="stage" disable_drag_drop_record='true' class="o_kanban_mobile o_kanban_small_column o_opportunity_kanban">
+          <field name="stage" widget="statusbar" statusbar_visible="Traitement à faire,Fichier invalidé,Traitement terminé"/>
+          <field name="name"/>
+          <field name="submit_by"/>
+          <field name="submit_on"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click">
+                <div class="oe_kanban_details">
+                  <strong class="o_kanban_record_title">
+                    <field name="name"/>
+                  </strong>
+                  <div t-if="record.submit_by">
+                    <t t-esc="record.submit_by.value"/>
+                  </div>
+                  <div t-if="record.submit_on">
+                    <t t-esc="record.submit_on.value"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="batch_form">
+      <field name="name">Creation de Fichier </field>
+      <field name="model">qc_comptable.soumission</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button name="upload_valid" type="object" attrs="{'invisible': [('stage','!=','Traitement à faire')]}" string="Valider" class="oe_highlight"/>
+            <button name="upload_reject" type="object" attrs="{'invisible': [('stage','!=','Traitement à faire')]}" string="Rejeter" class="oe_highlight"/>
+            <field name="stage" widget="statusbar" statusbar_visible="Traitement à faire,Fichier invalidé,Traitement terminé"/>
+          </header>
+          <sheet>
+            <group>
+              <field name="name"/>
+            </group>
+            <group>
+              <group>
+                <field name="user_id"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="submit_by"/>
+              </group>
+              <group>
+                <field name="submit_on"/>
+              </group>
+            </group>
+            <group>
+              <field name="note"/>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="activity_ids" widget="mail_activity"/>
+            <field name="message_ids" widget="mail_thread" option="{'post_refresh':'recipients'}"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="facture_form">
+      <field name="name">Creation Facture</field>
+      <field name="model">qc_comptable.facture</field>
+      <field name="arch" type="xml">
+        <form>
+        <header>
+          <button name="upload_get" type="object" attrs="{'invisible': [('stage','!=','Traitement à faire')]}" string="Traiter" class="oe_highlight"/>
+          <button name="upload_reviewed" type="object" attrs="{'invisible': [('stage','!=','Traitement en cours')]}" string="Terminer" class="oe_highlight"/>
+          <button name="upload_cancel" type="object" attrs="{'invisible': [('stage','!=','Traitement en cours')]}" string="Rejeter" class="oe_highlight"/>
+          <field name="stage" widget="statusbar" statusbar_visible="Traitement à faire,Traitement en cours,Traitement terminé"/>
+        </header>
+
+          <sheet>
+            <group>
+              <field name="name"/>
+            </group>
+            <group>
+              <group>
+                <field name="date_facture"/>
+              </group>
+              <group>
+                <field name="total_facture"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="partner_id"/>
+              </group>
+              <group>
+                <field name="user_id"/>
+              </group>
+            </group>
+            <group><field name="article_ids"/></group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="activity_ids" widget="mail_activity"/>
+            <field name="message_ids" widget="mail_thread" option="{'post_refresh':'recipients'}"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="facture_list">
+      <field name="name">Liste Facture</field>
+      <field name="model">qc_comptable.facture</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="partner_id"/>
+          <field name="date_facture"/>
+          <field name="total_facture"/>
+          <field name="user_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="facture_kanban">
+      <field name="name">List Fichier Recu</field>
+      <field name="model">qc_comptable.facture</field>
+      <field name="arch" type="xml">
+        <kanban default_group_by="stage" disable_drag_drop_record='true' class="o_kanban_mobile o_kanban_small_column o_opportunity_kanban">
+          <field name="stage" widget="statusbar"/>
+          <field name="name"/>
+          <field name="partner_id"/>
+          <field name="date_facture"/>
+          <field name="total_facture"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click">
+                <div class="oe_kanban_details">
+                  <strong class="o_kanban_record_title">
+                    <field name="name"/>
+                  </strong>
+                  <strong class="o_kanban_record_title">
+                    <field name="total_facture"/>
+                  </strong>
+                  <div t-if="record.partner_id">
+                    <t t-esc="record.partner_id.value"/>
+                  </div>
+                  <div t-if="record.total_facture">
+                    <t t-esc="record.total_facture.value"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="line_list">
+      <field name="name">qc_comptable list</field>
+      <field name="model">qc_comptable.article</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="description"/>
+          <field name="qty"/>
+          <field name="prix_unitaire_ht"/>
+          <field name="prix_total_ht"/>
+          <field name="tva"/>
+          <field name="prix_ttc"/>
+          <field name="facture_id" invisible="True"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="line_form">
+      <field name="name">qc_comptable facture form</field>
+      <field name="model">qc_comptable.article</field>
+      <field name="arch" type="xml">
+        <form>
+          <field name="name"/>
+          <field name="qty"/>
+          <field name="prix_unitaire_ht"/>
+          <field name="prix_total_ht"/>
+          <field name="tva"/>
+          <field name="prix_ttc"/>
+          <field name="description"/>
+          <field name="facture_id"/>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="facture_action_window">
+      <field name="name">Facture</field>
+      <field name="res_model">qc_comptable.facture</field>
+      <field name="view_mode">kanban,form,tree</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="article_action_window">
+      <field name="name">Article</field>
+      <field name="res_model">qc_comptable.article</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="batch_action_window">
+      <field name="name">Soumission</field>
+      <field name="res_model">qc_comptable.soumission</field>
+      <field name="view_mode">kanban,form,tree</field>
+    </record>
+
+
+    <!-- Menu item -->
+
+    <menuitem name="Comptabilité" id="comptable_menu_root" sequence="8" groups="base.group_user" web_icon="qc_comptable,static/description/icon.png"/>
+    <menuitem name="Fiche Reçue" id="qcbatch_menu" parent="comptable_menu_root" action="batch_action_window"/>
+    <menuitem name="Facture" id="qcfacture_menu" parent="comptable_menu_root" action="facture_action_window"/>
+    <menuitem name="Article" id="qcarticle_menu" parent="comptable_menu_root" action="article_action_window"/>
+
+    <menuitem name="Configuration" id="configuration_menu" parent="comptable_menu_root"/>
+
+
+</odoo>

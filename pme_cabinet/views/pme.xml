@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root Menus -->
+
+
+
+    <!-- PME View -->
+    <record id="pme_form_inherit" model="ir.ui.view">
+        <field name="name">pme.view.form</field>
+        <field name="model">pme</field>
+        <field name="arch" type="xml">
+            <form string="Accueil">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                            <field name="localisation" />
+                            <field name="domaine" />
+                        </group>
+                        <group name="Nos contacts">
+                            <div class="o_row">
+                                <span style="font-size:52px; color: red"> <i class="fa fa-phone"/>
+                                </span>
+                                <field name="contact_fix" nolabel="1"/>
+                            </div>
+                            <div class="o_row">
+                                <span style="font-size:52px; color: green">  <i class="fa fa-whatsapp"/>
+                                </span>
+                                <field name="contact_whatsapp" nolabel="1"/>
+                            </div>
+                            <div class="o_row">
+                                <span style="font-size:52px; color: blue"><i class="fa fa-at"/>
+                                </span>
+                                <field name="contact_mail" nolabel="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="site_web" />
+                            <field name="service_offerts" />
+                        </group>
+                    </group>
+                    <group>
+                            <field name="description" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="pme_view_tree" model="ir.ui.view">
+        <field name="name">pme.tree</field>
+        <field name="model">pme</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="localisation"/>
+                <field name="contact_fix"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pme_action" model="ir.actions.act_window">
+        <field name="name">PME</field>
+        <field name="res_model">pme</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_all': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new PME.
+            </p>
+            <p>
+                PME créé avec succes.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="pme_cabinet_root"
+              name="PME/Cabinet"
+              sequence="10"
+              web_icon="pme_cabinet,static/description/icon.jpg"/>
+
+    <menuitem id="pme"
+              name="PME" parent="pme_cabinet_root"
+              sequence="100"
+              action="pme_action"
+              groups="pme_cabinet.group_pme_cabinet_manager"
+    />
+    <menuitem id="cabinet"
+              name="Cabinet" parent="pme_cabinet_root"
+              sequence="110"
+              action="cabinet_action"
+              groups="pme_cabinet.group_pme_cabinet_manager"/>
+
+
+</odoo>

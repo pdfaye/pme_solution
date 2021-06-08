@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_pme_user,pme_user,model_pme,pme_cabinet.group_pme_cabinet_user,1,0,0,0
+access_hr_pme_manager,pme_manager,model_pme,pme_cabinet.group_pme_cabinet_manager,1,1,1,1
+access_hr_cabinet_user,cabinet_user,model_cabinet,pme_cabinet.group_pme_cabinet_user,1,0,0,0
+access_hr_cabinet_manager,cabinet_manager,model_cabinet,pme_cabinet.group_pme_cabinet_manager,1,1,1,1
+access_hr_service_user,service_user,model_service,pme_cabinet.group_pme_cabinet_user,1,0,0,0
+access_hr_service_manager,service_manager,model_service,pme_cabinet.group_pme_cabinet_manager,1,1,1,1

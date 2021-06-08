@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Employee View -->
+    <record id="payroll_hr_employee_view_form" model="ir.ui.view">
+        <field name="name">payroll.hr.employee.view.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="%(act_hr_employee_payslip_list)d"
+                        class="oe_stat_button"
+                        icon="fa-credit-card"
+                        type="action"
+                        groups="hr_payroll_community.group_hr_payroll_community_user">
+                        <field name="payslip_count" widget="statinfo" string="Payslips"/>
+                    </button>
+                </xpath>
+        <data>
+                    <!--<label for="remaining_leaves" position="before">
+                        <label for="max_leaves" />
+                        <div>
+                            <field
+                                name="max_leaves"
+                                string="Acquis"
+                                class="oe_inline"
+                            />
+                            days
+                        </div>
+                        <label for="leaves_taken" />
+                        <div>
+                            <field
+                                name="leaves_taken"
+                                string="Pris"
+                                class="oe_inline"
+                            />
+                            days
+                        </div>
+                    </label>-->
+                    <field name="marital" position="after">
+                        <field
+                            name="status_spouse"
+                            attrs="{'invisible': [('marital','!=','married')]}"
+                        />
+                    </field>
+                    <xpath expr="//group[@name='active_group']" position="after">
+                        <!--<group string="Paie">
+                            <field name="social_parts" />
+                            <field name="coef" />
+                        </group>-->
+                        <group string="Contributions Sociales">
+                            <field name="ipres_id" />
+                            <field name="css_id" />
+                            <field name="ipm_id" />
+                        </group>
+                    </xpath>
+                    <field name="user_id" position="after">
+                        <field name="matricule" />
+                    </field>
+                    <field name="passport_id" position="before">
+                        <field name="cni_id" />
+                    </field>
+                </data>
+            </field>
+    </record>
+    <!--<record id="view_tpe_children_form" model="ir.ui.view">
+        <field name="name">hr.children.form</field>
+        <field name="model">hr.children</field>
+        <field name="arch" type="xml">
+            <form string="Enfant en charge">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="nom" />
+                        </group>
+                        <group>
+                            <field name="date_naissance" />
+                        </group>
+                        <group>
+                            <field name="age" />
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_children_tree" model="ir.ui.view">
+            <field name="name">hr.children.tree</field>
+            <field name="model">hr.children</field>
+            <field name="arch" type="xml">
+                <tree string="Enfant en charge">
+                    <field name="nom"/>
+                    <field name="age"/>
+                </tree>
+            </field>
+    </record>
+    <record id="tpe_children_action" model="ir.actions.act_window">
+        <field name="name">Enfant en charge</field>
+        <field name="res_model">hr.children</field>
+        <field name="view_mode">tree, form</field>
+        <field name="context">{'search_default_all': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new children.
+            </p>
+            <p>
+                Categories are used to categorize Documents.
+            </p>
+        </field>
+    </record>-->
+
+
+    <menuitem id="menu_payroll_employee"
+              name="Employees"
+              parent="menu_hr_payroll_community_root"
+              sequence="15"/>
+
+    <menuitem id="menu_hr_employee"
+              name="Employees"
+              action="hr.open_view_employee_list_my"
+              parent="menu_payroll_employee"
+              sequence="10"/>
+
+    <menuitem id="hr_menu_contract"
+              name="Contracts"
+              action="hr_contract.action_hr_contract"
+              parent="menu_payroll_employee"
+              sequence="20"
+              groups="hr_payroll_community.group_hr_payroll_community_user"/>
+
+    <!--<menuitem id="menu_payroll_employee_children"
+              name="Children"
+              parent="menu_payroll_employee"
+              action="tpe_children_action"
+              sequence="22"/>-->
+
+    <menuitem id="hr.menu_hr_department_tree"
+              parent="menu_hr_payroll_community_root"
+              sequence="21"/>
+
+
+</odoo>

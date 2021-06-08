@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2016, 2019 Openworx.
+    @author Mario Gielissen <mario@openworx.nl>
+    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+-->
+
+<odoo>
+    <data>
+		<template id="assets_backend" name="dms backend" inherit_id="web.assets_backend">
+		<xpath expr="." position="inside">
+			<script type="text/javascript" src="/dms/static/src/js/compatibility.js" />
+			<script type="text/javascript" src="/dms/static/src/js/pdf.js" />
+			<script type="text/javascript" src="/dms/static/src/js/pdf.worker.js" />
+			<script type="text/javascript" src="/dms/static/src/js/pdfjsversion.js" />
+			<script type="text/javascript" src="/dms/static/src/js/text_layer_builder.js" />
+			<script type="text/javascript" src="/dms/static/src/js/ui_utils.js" />
+			<script type="text/javascript" src="/dms/static/src/js/webodf.js" />
+			<link rel="stylesheet" href="/dms/static/src/scss/example.local.css"/>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/viewer.js/0.10.8/crocodoc.viewer.min.js"
+					integrity="sha512-vwDBZAkU0zySw5BbcxdBuiCc/3LvKH25eAXLRVvwBIoStpYfPBIJTdbI7J60HevG3tcyEZDZPGW6hA3tl4ztUQ=="
+					crossorigin="anonymous"/>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/viewer.js/0.10.8/crocodoc.viewer.js"
+					integrity="sha512-xB1xjtzD181G3hvOJhS2Pp1g7bb/S0a19GvXtOEWxP5rRo4/DsXXPKUph5O/y6W/46zAX08Rm+Vfq3J7FhBUzQ=="
+					crossorigin="anonymous"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewer.js/0.10.8/crocodoc.viewer.css" integrity="sha512-F+An1l5H7w4PinhmtAiiG/JrHSUvrBJWlytTcYMxvc9aT8nlqq0ReGPd9yNVJfqx9Is55LhxdSLQpzYajZMs/g==" crossorigin="anonymous" />
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewer.js/0.10.8/crocodoc.viewer.min.css" integrity="sha512-jAVIfla9cGC2XTsuums5gsZwun9OMLa4GGNCPDXfxFQLkxm/FT8U7TcPRCO/PUbUdnTrQ35gw+4p76FdBYqmNQ==" crossorigin="anonymous" />
+
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.common.js"
+					integrity="sha512-HI5DDpWDS/guCKQvX8IbqIQ3rKKaHOvteIRySIulhdzu5ocqhQlV09d6Gx8BBF8E43aO/wWsAcp4x/DbgsyY3Q=="
+					crossorigin="anonymous"/>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.min.js"
+					integrity="sha512-0goo56vbVLOJt9J6TMouBm2uE+iPssyO+70sdrT+J5Xbb5LsdYs31Mvj4+LntfPuV+VlK0jcvcinWQG5Hs3pOg=="
+					crossorigin="anonymous"/>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.common.min.js"
+					integrity="sha512-ebtlmGBX5lvdEfWBhqL6Z7hRU8K/clYarfWyOy8ghTQwlYfNjIl+yV+Dm9Ganu6rRrifD0tNktThiR+9kfemYQ=="
+					crossorigin="anonymous"/>
+			<!--	<link rel="stylesheet" href="/backend_theme_v13/static/src/scss/sidebar.scss"/>
+				<script type="application/javascript" src="/backend_theme_v13/static/src/js/sidebar.js"/>
+				<script type="application/javascript" src="/backend_theme_v13/static/src/js/sidebar-toggle.js"/> -->
+			</xpath>
+		</template>
+    </data>
+</odoo>

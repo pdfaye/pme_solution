@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_qc_comptable_soumission,accesss_qc_comptable_soumission,model_qc_comptable_soumission,base.group_user,1,1,1,1
+access_qc_comptable_soumission_portal,accesss_qc_comptable_soumission,model_qc_comptable_soumission,base.group_portal,1,0,0,0
+access_qc_comptable_facture,accesss_qc_comptable_facture,model_qc_comptable_facture,base.group_user,1,1,1,1
+access_qc_comptable_facture_portal,accesss_qc_comptable_facture,model_qc_comptable_facture,base.group_portal,1,1,0,0
+access_qc_comptable_article,accesss_qc_comptable_article,model_qc_comptable_article,base.group_user,1,1,1,1
+access_qc_comptable_article_portal,accesss_qc_comptable_article,model_qc_comptable_article,base.group_portal,1,1,0,0
